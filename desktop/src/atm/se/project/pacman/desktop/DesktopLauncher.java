@@ -10,6 +10,7 @@ public class DesktopLauncher {
 		config.width = 900;
 		config.height = 600;
 		config.title = "PacMan";
+		config.vSyncEnabled = true;
 		new LwjglApplication(new MyGdxGame(), config);
 	}
 }
