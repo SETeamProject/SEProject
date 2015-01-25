@@ -30,7 +30,10 @@ public class GameScreen implements Screen {
 	private final int VELOCITY=8;
 	private final int POZITIE=3;
 	
-
+	
+	private float speed=500;
+	private Vector2 movement=new Vector2();
+	private Body c;
 	
 	
 	
@@ -47,8 +50,42 @@ public class GameScreen implements Screen {
 			@Override
 			public boolean keyDown(int keycode) {
 				
-				if(keycode==Keys.ESCAPE)
+				switch(keycode)
+				{
+				case Keys.ESCAPE:	
 					((Game)Gdx.app.getApplicationListener()).setScreen(new MainMenu());
+					break;
+				case Keys.A:
+					movement.x=-speed;
+					break;
+				case Keys.D:
+					movement.x=speed;
+					break;
+				case Keys.S:
+					movement.y=-speed;
+					break;
+				case Keys.W:
+					movement.y=speed;
+					break;
+					
+				}	
+				return true;
+			}
+			
+			@Override
+			public boolean keyUp(int keycode) {
+				switch(keycode)
+				{
+				case Keys.W:
+				case Keys.S:
+					movement.y=0;
+					break;
+				case Keys.A:
+				case Keys.D:
+					movement.x=0;
+					break;
+					
+				}	
 				return true;
 			}
 		});
@@ -74,9 +111,14 @@ public class GameScreen implements Screen {
 		fixture.friction=.25f;
 		fixture.restitution=.75f;
 
-		world.createBody(body).createFixture(fixture);
+		c= world.createBody(body);
+		c.createFixture(fixture);
 		
 		shape.dispose();
+		
+		c.applyAngularImpulse(500, true);
+		
+		
 		
 		//tabla
 		body.type=BodyType.StaticBody;
@@ -104,11 +146,15 @@ public class GameScreen implements Screen {
 		Gdx.gl.glClearColor(0, 0, 0, 1);
 		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
+		//daca vreau sa mut camera
+		//camera.position.set(c.getPosition().x, c.getPosition().y, 0);
+		//camera.update();
+		
 		debugRenderer.render(world, camera.combined);
 		
 		world.step(TIMESTEP, VELOCITY, POZITIE);
 		
-		
+		c.applyForceToCenter(movement, true);
 	}
 
 	@Override
