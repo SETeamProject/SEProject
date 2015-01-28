@@ -95,7 +95,7 @@ public class GameScreen implements Screen {
 		body.position.set(0, 1);
 		
 		CircleShape shape=new CircleShape();
-		shape.setRadius(0.5f);
+		shape.setRadius(0.45f);
 		
 		
 
@@ -110,7 +110,7 @@ public class GameScreen implements Screen {
 		fixture.shape=shape;
 		fixture.density= 2.5f;
 		fixture.friction=.25f;
-		fixture.restitution=.75f;
+		fixture.restitution=.35f;
 
 		c= world.createBody(body);
 		c.createFixture(fixture);
@@ -144,337 +144,34 @@ public class GameScreen implements Screen {
 		//zidurile pentru primul chenar
 		//zid1
 		body.type=BodyType.StaticBody;
-		body.position.set(10f, 5f);
 		
+		Integer[] positionVect={10,5,-1,-8,10,-5,5,8,-6,8,-10,3,-10,-6,0,6,-8,-1,1,-6,8,2,8,-5,4,4,-3,4,-6,0,-1,-4,6,-2,0,-2,4,0,0,2};
+		float[] coordVect = {0.1f,3.0f,9.0f,0.1f,0.1f,4.0f,5.0f,0.1f,4.0f,0.1f,
+				             0.1f,5.0f,0.1f,2.0f,8.0f,0.1f,0.1f,5.0f,7.0f,0.1f,
+				             0.1f,4.0f,0.1f,1.0f,2.0f,0.1f,3.0f,0.1f,0.1f,4.0f,
+				             5.0f,0.1f,0.1f,4.0f,4.0f,0.1f,0.1f,2.0f,4.0f,0.1f};
 		
-		PolygonShape zid1 = new PolygonShape();
-		zid1.setAsBox(.1f, 3);
+		PolygonShape[] wallVect= new PolygonShape[20];
 		
-		fixture.shape=zid1;
-		fixture.friction=0f;
-		fixture.restitution=0f;
-		fixture.density=5;
+		int j=0;
 		
+		for (int i = 0; i < 40; i+=2) {
+			
+			wallVect[j]= new PolygonShape();
+			body.position.set(positionVect[i], positionVect[i+1]);
+			wallVect[j].setAsBox(coordVect[i], coordVect[i+1]);
+			
+			fixture.shape=wallVect[j];
+			fixture.friction=50f;
+			fixture.restitution=0f;
+			fixture.density=5;
+			
+			world.createBody(body).createFixture(fixture);
+			
+			wallVect[j].dispose();
+			j++;
+		}
 		
-		
-		world.createBody(body).createFixture(fixture);
-		
-		zid1.dispose();
-		
-		//zid2
-		body.type=BodyType.StaticBody;
-		body.position.set(-1f, -8f);
-		
-		
-		PolygonShape zid2 = new PolygonShape();
-		zid2.setAsBox(9f, 0.1f);
-				
-		fixture.shape=zid2;
-		fixture.friction=0f;
-		fixture.restitution=0f;
-		fixture.density=5;
-		
-		world.createBody(body).createFixture(fixture);
-		zid2.dispose();
-		
-		//zid3
-		body.type=BodyType.StaticBody;
-		body.position.set(10f, -4f);//pozitia stanga, sus
-				
-				
-		PolygonShape zid3 = new PolygonShape();
-		zid3.setAsBox(.1f, 4f);//latime, lungime
-				
-		fixture.shape=zid3;
-		fixture.friction=0f;
-		fixture.restitution=0f;
-		fixture.density=5;
-				
-		world.createBody(body).createFixture(fixture);
-				
-		zid3.dispose();
-		
-		//zid4
-		body.type=BodyType.StaticBody;
-		body.position.set(5.1f, 8f);//pozitia stanga, sus
-				
-				
-		PolygonShape zid4 = new PolygonShape();
-		zid4.setAsBox(5f, 0.1f);//latime, lungime
-						
-		fixture.shape=zid4;
-		fixture.friction=0f;
-		fixture.restitution=0f;
-		fixture.density=5;
-				
-		world.createBody(body).createFixture(fixture);
-		zid4.dispose();
-		
-		//zid5
-		body.type=BodyType.StaticBody;
-		body.position.set(-6.1f, 8f);//pozitia stanga, sus
-						
-						
-		PolygonShape zid5 = new PolygonShape();
-		zid4.setAsBox(4f, 0.1f);//latime, lungime
-								
-		fixture.shape=zid5;
-		fixture.friction=0f;
-		fixture.restitution=0f;
-		fixture.density=5;
-						
-		world.createBody(body).createFixture(fixture);
-		zid5.dispose();
-		
-		//zid6
-		body.type=BodyType.StaticBody;
-		body.position.set(-10f, 3f);
-				
-				
-		PolygonShape zid6 = new PolygonShape();
-		zid1.setAsBox(.1f, 5);
-				
-		fixture.shape=zid6;
-		fixture.friction=0f;
-		fixture.restitution=0f;
-		fixture.density=5;
-					
-		world.createBody(body).createFixture(fixture);
-				
-		zid6.dispose();	
-		
-		//zid7
-		body.type=BodyType.StaticBody;
-		body.position.set(-10f, -6.1f);//pozitia stanga, sus
-				
-				
-		PolygonShape zid7 = new PolygonShape();
-		zid7.setAsBox(.1f, 2f);//latime, lungime
-				
-		fixture.shape=zid7;
-		fixture.friction=0f;
-		fixture.restitution=0f;
-		fixture.density=5;
-				
-		world.createBody(body).createFixture(fixture);
-				
-		zid7.dispose();
-		
-		//zidurile pentru al 2 lea chenar
-		//zid8
-		body.type=BodyType.StaticBody;
-		body.position.set(0f, 6f);
-				
-				
-		PolygonShape zid8 = new PolygonShape();
-		zid8.setAsBox(8f, 0.1f);
-						
-		fixture.shape=zid8;
-		fixture.friction=0f;
-		fixture.restitution=0f;
-		fixture.density=5;
-				
-		world.createBody(body).createFixture(fixture);
-		zid8.dispose();
-		
-		//zid9
-		body.type=BodyType.StaticBody;
-		body.position.set(-8f, -1f);//pozitia stanga, sus
-						
-						
-		PolygonShape zid9 = new PolygonShape();
-		zid9.setAsBox(.1f, 5f);//latime, lungime
-						
-		fixture.shape=zid9;
-		fixture.friction=0f;
-		fixture.restitution=0f;
-		fixture.density=5;
-						
-		world.createBody(body).createFixture(fixture);
-						
-		zid9.dispose();	
-		
-		//zid10
-		body.type=BodyType.StaticBody;
-		body.position.set(1f, -6f);
-						
-						
-		PolygonShape zid10 = new PolygonShape();
-		zid10.setAsBox(7f, 0.1f);
-								
-		fixture.shape=zid10;
-		fixture.friction=0f;
-		fixture.restitution=0f;
-		fixture.density=5;
-						
-		world.createBody(body).createFixture(fixture);
-		zid10.dispose();
-		
-		//zid11
-		body.type=BodyType.StaticBody;
-		body.position.set(8f, 2.1f);//pozitia stanga, sus
-								
-								
-		PolygonShape zid11 = new PolygonShape();
-		zid11.setAsBox(.1f, 4f);//latime, lungime
-								
-		fixture.shape=zid11;
-		fixture.friction=0f;
-		fixture.restitution=0f;
-		fixture.density=5;
-								
-		world.createBody(body).createFixture(fixture);
-								
-		zid11.dispose();
-		
-		//zid12
-		body.type=BodyType.StaticBody;
-		body.position.set(8f, -5.1f);//pozitia stanga, sus
-										
-										
-		PolygonShape zid12 = new PolygonShape();
-		zid12.setAsBox(.1f, 1f);//latime, lungime
-										
-		fixture.shape=zid12;
-		fixture.friction=0f;
-		fixture.restitution=0f;
-		fixture.density=5;
-										
-		world.createBody(body).createFixture(fixture);
-										
-		zid12.dispose();
-		
-		//zidurile pentru al 3 lea chenar
-		//zid13
-		body.type=BodyType.StaticBody;
-		body.position.set(4f, 4f);
-						
-						
-		PolygonShape zid13 = new PolygonShape();
-		zid13.setAsBox(2f, 0.1f);
-								
-		fixture.shape=zid13;
-		fixture.friction=0f;
-		fixture.restitution=0f;
-		fixture.density=5;
-						
-		world.createBody(body).createFixture(fixture);
-		zid13.dispose();
-		
-		//zid14
-		body.type=BodyType.StaticBody;
-		body.position.set(-3f, 4f);
-								
-								
-		PolygonShape zid14 = new PolygonShape();
-		zid14.setAsBox(3f, 0.1f);
-										
-		fixture.shape=zid14;
-		fixture.friction=0f;
-		fixture.restitution=0f;
-		fixture.density=5;
-								
-		world.createBody(body).createFixture(fixture);
-		zid14.dispose();
-		
-		//zid15
-		body.type=BodyType.StaticBody;
-		body.position.set(-6f, 0.1f);//pozitia stanga, sus
-										
-										
-		PolygonShape zid15 = new PolygonShape();
-		zid15.setAsBox(.1f, 4f);//latime, lungime
-										
-		fixture.shape=zid15;
-		fixture.friction=0f;
-		fixture.restitution=0f;
-		fixture.density=5;
-										
-		world.createBody(body).createFixture(fixture);
-										
-		zid15.dispose();
-		
-		//zid16
-		body.type=BodyType.StaticBody;
-		body.position.set(-1.1f, -4f);
-								
-								
-		PolygonShape zid16 = new PolygonShape();
-		zid16.setAsBox(5f, 0.1f);
-										
-		fixture.shape=zid16;
-		fixture.friction=0f;
-		fixture.restitution=0f;
-		fixture.density=5;
-								
-		world.createBody(body).createFixture(fixture);
-		zid16.dispose();
-		
-		//zid17
-		body.type=BodyType.StaticBody;
-		body.position.set(6f, -2.1f);//pozitia stanga, sus
-												
-												
-		PolygonShape zid17 = new PolygonShape();
-		zid17.setAsBox(.1f, 4f);//latime, lungime
-												
-		fixture.shape=zid17;
-		fixture.friction=0f;
-		fixture.restitution=0f;
-		fixture.density=5;
-												
-		world.createBody(body).createFixture(fixture);
-												
-		zid17.dispose();
-		
-		//zid18
-		body.type=BodyType.StaticBody;
-		body.position.set(0.0f, -2f);
-										
-										
-		PolygonShape zid18 = new PolygonShape();
-		zid18.setAsBox(4f, 0.1f);
-												
-		fixture.shape=zid18;
-		fixture.friction=0f;
-		fixture.restitution=0f;
-		fixture.density=5;
-										
-		world.createBody(body).createFixture(fixture);
-		zid18.dispose();
-		
-		//zid19
-		body.type=BodyType.StaticBody;
-		body.position.set(3.9f, -0.1f);//pozitia stanga, sus
-														
-														
-		PolygonShape zid19 = new PolygonShape();
-		zid19.setAsBox(.1f, 2f);//latime, lungime
-														
-		fixture.shape=zid19;
-		fixture.friction=0f;
-		fixture.restitution=0f;
-		fixture.density=5;
-														
-		world.createBody(body).createFixture(fixture);
-														
-		zid19.dispose();
-		
-		//zid20
-		body.type=BodyType.StaticBody;
-		body.position.set(0.0f, 1.9f);
-												
-												
-		PolygonShape zid20 = new PolygonShape();
-		zid20.setAsBox(4f, 0.1f);
-														
-		fixture.shape=zid20;
-		fixture.friction=0f;
-		fixture.restitution=0f;
-		fixture.density=5;
-												
-		world.createBody(body).createFixture(fixture);
-		zid20.dispose();
 	}
 
 	@Override
