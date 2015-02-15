@@ -6,6 +6,10 @@ import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
+import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.Sprite;
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Body;
@@ -17,6 +21,7 @@ import com.badlogic.gdx.physics.box2d.CircleShape;
 import com.badlogic.gdx.physics.box2d.FixtureDef;
 import com.badlogic.gdx.physics.box2d.PolygonShape;
 import com.badlogic.gdx.physics.box2d.World;
+import com.badlogic.gdx.utils.Array;
 import com.sun.xml.internal.bind.CycleRecoverable;
 
 public class GameScreen implements Screen {
@@ -24,6 +29,8 @@ public class GameScreen implements Screen {
 	
 	private World world;
 	private Box2DDebugRenderer debugRenderer;
+	private SpriteBatch batch;
+	private SpriteBatch foodBatch;
 	private OrthographicCamera camera;
 	
 	private final float TIMESTEP=1/1000f;
@@ -35,8 +42,10 @@ public class GameScreen implements Screen {
 	private Vector2 movement=new Vector2();
 	private Body c;
 	
-	
-	
+
+	private Sprite pacSprite;
+	private Sprite foodSprite;
+	private Array<Body> tmpBodies = new Array<Body>();
 	
 	@Override
 	public void show() {
@@ -44,6 +53,9 @@ public class GameScreen implements Screen {
 		
 		world =new World(new Vector2(0, -9.81f), true);
 		debugRenderer=new Box2DDebugRenderer();
+		batch = new SpriteBatch();
+		foodBatch = new SpriteBatch();
+		
 		camera=new OrthographicCamera();
 
 		Gdx.input.setInputProcessor(new InputESC(){
@@ -95,7 +107,7 @@ public class GameScreen implements Screen {
 		body.position.set(0, 1);
 		
 		CircleShape shape=new CircleShape();
-		shape.setRadius(0.45f);
+		shape.setRadius(0.25f);
 		
 		
 
@@ -108,12 +120,17 @@ public class GameScreen implements Screen {
 		*/
 		FixtureDef fixture=new FixtureDef();
 		fixture.shape=shape;
-		fixture.density= 2.5f;
+		fixture.density= 5.5f;
 		fixture.friction=.25f;
 		fixture.restitution=.35f;
 
 		c= world.createBody(body);
 		c.createFixture(fixture);
+		
+		pacSprite = new Sprite(new Texture("picture.png"));
+		pacSprite.setSize(0.35f * 2, 1f);
+		pacSprite.setOrigin(pacSprite.getWidth()/2, pacSprite.getHeight()/2);
+		c.setUserData(pacSprite);
 		
 		shape.dispose();
 		
@@ -172,6 +189,37 @@ public class GameScreen implements Screen {
 			j++;
 		}
 		
+		body.type=BodyType.StaticBody;
+		CircleShape[] foodVect=new CircleShape[3];
+		j=0;
+		
+		float[] foodVector = {5f,5f,3f,5f,1f,5f};
+		
+		for (int i = 0; i < 6; i+=2) {
+			body.position.set(foodVector[i], foodVector[i+1]);
+			foodVect[j]=new CircleShape();
+			
+			foodVect[j].setRadius(0.25f);
+			
+			fixture.shape=foodVect[j];
+			fixture.density= 5.5f;
+			fixture.friction=.25f;
+			fixture.restitution=.35f;
+
+			world.createBody(body).createFixture(fixture);
+			
+			foodVect[j].dispose();
+			j++;
+		}
+		
+		
+	/*	
+		foodSprite = new Sprite(new Texture("Untitled.png"));
+		foodSprite.setSize(0.35f * 2, 1f);
+		foodSprite.setOrigin(foodSprite.getWidth()/2, foodSprite.getHeight()/2);
+		c.setUserData(foodSprite);
+	*/	
+		
 	}
 
 	@Override
@@ -187,6 +235,31 @@ public class GameScreen implements Screen {
 		
 		world.step(TIMESTEP, VELOCITY, POZITIE);
 		
+		batch.setProjectionMatrix(camera.combined);
+		batch.begin();
+		world.getBodies(tmpBodies);
+		for(Body body: tmpBodies)
+			if(body.getUserData() != null && body.getUserData() instanceof Sprite){
+				Sprite sprite = (Sprite) body.getUserData();
+				sprite.setPosition(body.getPosition().x - sprite.getWidth()/2, body.getPosition().y-sprite.getHeight()/2);
+			    //sprite.setRotation(body.getAngle()*MathUtils.radiansToDegrees);
+			    sprite.draw(batch);
+			}
+	
+		batch.end();
+		/*	
+		foodBatch.setProjectionMatrix(camera.combined);
+		foodBatch.begin();
+		world.getBodies(tmpBodies);
+		for(Body body: tmpBodies)
+			if(body.getUserData() != null && body.getUserData() instanceof Sprite){
+				Sprite sprite = (Sprite) body.getUserData();
+				sprite.setPosition(body.getPosition().x - sprite.getWidth()/2, body.getPosition().y-sprite.getHeight()/2);
+			    //sprite.setRotation(body.getAngle()*MathUtils.radiansToDegrees);
+			    sprite.draw(foodBatch);
+			}
+		foodBatch.end();
+		*/
 		c.applyForceToCenter(movement, true);
 	}
 
@@ -224,6 +297,7 @@ public class GameScreen implements Screen {
 
 		world.dispose();
 		debugRenderer.dispose();
+		pacSprite.getTexture().dispose();
 	}
 
 }
