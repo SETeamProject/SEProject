@@ -190,16 +190,33 @@ public class GameScreen implements Screen {
 		}
 		
 		body.type=BodyType.StaticBody;
-		CircleShape[] foodVect=new CircleShape[3];
+		CircleShape[] foodVect=new CircleShape[120];
 		j=0;
 		
-		float[] foodVector = {5f,5f,3f,5f,1f,5f};
+		float[] foodVector = {7f,5f,5f,5f,3f,5f,1f,5f,-1f,5f,-3f,5f,-5f,5f,-7f,5f,-9f,5f,
+							  7f,3f,7f,1f,7f,-1f,7f,-3f,7f,-5f,7f,-7f,7f,-9f,
+							  -9f,3f,-9f,1f,-9f,-1f,-9f,-3f,-9f,-5f,-9f,-7f,-9f,-9f,
+				              -7f,3f,-7f,1f,-7f,-3f,-7f,-1f,-7f,-5f,-7f,-7f,-7f,-9f,
+				              -5f,3f,-5f,1f,-5f,-3f,-5f,-1f,-5f,-5f,-5f,-7f,-5f,-9f,
+				              -3f,3f,-3f,1f,-3f,-3f,-3f,-1f,-3f,-5f,-3f,-7f,-3f,-9f,
+				              -1f,3f,-1f,1f,-1f,-3f,-1f,-1f,-1f,-5f,-1f,-7f,-1f,-9f,
+				               1f,3f,1f,1f,1f,-3f,1f,-1f,1f,-5f,1f,-7f,1f,-9f,
+				               3f,3f,3f,1f,3f,-3f,3f,-1f,3f,-5f,3f,-7f,3f,-9f,
+				               5f,3f,5f,1f,5f,-3f,5f,-1f,5f,-5f,5f,-7f,5f,-9f,
+				               9f,5f,
+				               9f,3f,9f,1f,9f,-3f,9f,-1f,9f,-5f,9f,-7f,9f,-9f,
+				               9f,7f,9f,9f,5f,7f,5f,9f,7f,7f,7f,9f,3f,7f,3f,9f,1f,7f,1f,9f,
+				               -1f,7f,-1f,9f,-3f,7f,-3f,9f,
+				               -5f,7f,-5f,9f,-7f,7f,-7f,9f,-9f,7f,-9f,9f,
+				               -11f,-9f,-11f,-7f,-11f,-5f,-11f,-3f,-11f,-1f,-11f,1f,-11f,3f,-11f,5f,-11f,7f,-11f,9f,
+				               11f,-9f,11f,-7f,11f,-5f,11f,-3f,11f,-1f,11f,1f,11f,3f,11f,5f,11f,7f,11f,9f,
+		                     };
 		
-		for (int i = 0; i < 6; i+=2) {
+		for (int i = 0; i < 240; i+=2) {
 			body.position.set(foodVector[i], foodVector[i+1]);
 			foodVect[j]=new CircleShape();
 			
-			foodVect[j].setRadius(0.25f);
+			foodVect[j].setRadius(0.2f);
 			
 			fixture.shape=foodVect[j];
 			fixture.density= 5.5f;
@@ -238,13 +255,16 @@ public class GameScreen implements Screen {
 		batch.setProjectionMatrix(camera.combined);
 		batch.begin();
 		world.getBodies(tmpBodies);
-		for(Body body: tmpBodies)
+		for(Body body: tmpBodies){
 			if(body.getUserData() != null && body.getUserData() instanceof Sprite){
 				Sprite sprite = (Sprite) body.getUserData();
 				sprite.setPosition(body.getPosition().x - sprite.getWidth()/2, body.getPosition().y-sprite.getHeight()/2);
 			    //sprite.setRotation(body.getAngle()*MathUtils.radiansToDegrees);
 			    sprite.draw(batch);
+			    
 			}
+			
+		}
 	
 		batch.end();
 		/*	
@@ -260,6 +280,8 @@ public class GameScreen implements Screen {
 			}
 		foodBatch.end();
 		*/
+		
+		
 		c.applyForceToCenter(movement, true);
 	}
 
